@@ -43,8 +43,6 @@ protected:
 	UPROPERTY()
 	float SavedDeltaTime;
 
-	virtual void OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode) override;
-
 	// The physics rules to be applied if we use a custom movement mode
 	virtual void PhysCustom(float deltaTime, int32 Iterations) override;
 

@@ -153,10 +153,13 @@ public:
 
 	FORCEINLINE bool GetIsClimbingLadder() const { return bIsClimbingLadder; }
 
+	UFUNCTION()
 	void SetIsClimbingLadder(const bool &NewIsClimbingLadder);
 
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	FORCEINLINE class AUsable* GetOnUseUsable() const { return OnUseUsable;  }
 
 protected:
 	// Usable item on focus

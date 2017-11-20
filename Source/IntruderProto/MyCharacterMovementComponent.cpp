@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "IntruderProtoCharacter.h"
+#include "Usables/Ladder.h"
 #include "GameFramework/PhysicsVolume.h"
 
 void UMyCharacterMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -255,21 +256,6 @@ void UMyCharacterMovementComponent::UnCrouch(bool bClientSimulation)
 	}
 }
 
-void UMyCharacterMovementComponent::OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode)
-{
-	Super::OnMovementModeChanged(PreviousMovementMode, PreviousCustomMode);
-
-	if (MovementMode == EMovementMode::MOVE_Custom) {
-		if (CustomMovementMode == (uint8)ECustomMovementMode::EClimbingLadder) {
-
-			AIntruderProtoCharacter* character = Cast<AIntruderProtoCharacter>(CharacterOwner);
-			if (character) {
-				character->SetIsClimbingLadder(true);
-			}
-		}
-	}
-}
-
 void UMyCharacterMovementComponent::PhysCustom(float deltaTime, int32 Iterations)
 {
 	Super::PhysCustom(deltaTime, Iterations);
@@ -300,6 +286,19 @@ void UMyCharacterMovementComponent::PhysClimbingLadder(float deltaTime, int32 It
 		// while climbing we can't move horizontaly
 		Velocity.X = 0;
 		Velocity.Y = 0;
+		if (Velocity.Z > 0.0f) {
+			AIntruderProtoCharacter* character = Cast<AIntruderProtoCharacter>(GetOwner());
+			if (!character)
+				return;
+
+			ALadder* ladder = Cast<ALadder>(character->GetOnUseUsable());
+			if (!ladder) { // if the on use object is not a ladder then we can't be climbing one!
+				character->SetIsClimbingLadder(false);
+				return;
+			}
+
+			Velocity += ladder->GetInward() * Velocity.Size() * 0.2f;
+		}
 	}
 
 	ApplyRootMotionToVelocity(deltaTime);

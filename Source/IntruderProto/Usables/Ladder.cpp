@@ -17,12 +17,12 @@ ALadder::ALadder()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	RootComponent = Root;
 
-	// Setup the trigger box
-	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
-	TriggerBox->SetupAttachment(GetRootComponent());
-	TriggerBox->bDynamicObstacle = true;
-	TriggerBox->bGenerateOverlapEvents = true;
-	TriggerBox->SetCollisionResponseToAllChannels(ECR_Overlap);
+	// Setup the climb volume
+	ClimbVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("ClimbVolume"));
+	ClimbVolume->SetupAttachment(GetRootComponent());
+	ClimbVolume->bDynamicObstacle = true;
+	ClimbVolume->bGenerateOverlapEvents = true;
+	ClimbVolume->SetCollisionResponseToAllChannels(ECR_Overlap);
 
 	// Setup the meshes 
 	LadderStraight = CreateAbstractDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("LadderStraight"));
@@ -53,10 +53,14 @@ ALadder::ALadder()
 		LadderBottom->SetStaticMesh(mesh.Object);
 	}
 
+	//Setup the arrow
+	InwardArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("InwardArrow"));
+	InwardArrow->SetRelativeRotation(FQuat(FVector(0.0f, 0.0f, 1.0f), FMath::DegreesToRadians(-90.0f)));
+
 	//init some values
 	AmountLadderMeshes = 10;
 	MeshHeight = 30.0f;
-	ReachX = 50.0f;
+	ReachX = 40.0f;
 	ReachY = 20.0f;
 }
 
@@ -90,12 +94,12 @@ void ALadder::OnConstruction(const FTransform &Transform)
 	
 	float boxCenter = AmountLadderMeshes * MeshHeight / 2;
 	float boxHeight = boxCenter + 20.0f;
-	FVector extents = TriggerBox->Bounds.BoxExtent;
+	FVector extents = ClimbVolume->Bounds.BoxExtent;
 	extents.Z = boxHeight;
 	extents.Y = ReachY;
 	extents.X = ReachX;
-	TriggerBox->SetBoxExtent(extents);
-	TriggerBox->SetRelativeLocation(FVector(0.0f, -10.0f, boxCenter));
+	ClimbVolume->SetBoxExtent(extents);
+	ClimbVolume->SetRelativeLocation(FVector(0.0f, 0.0f, boxCenter));
 }
 
 bool ALadder::CanBeUsed(AController* PromptUser)
@@ -105,8 +109,8 @@ bool ALadder::CanBeUsed(AController* PromptUser)
 		return false;
 	}
 
-	// if the user is not overlapping the triggerbox he/she can't use the ladder
-	if (!TriggerBox->IsOverlappingActor(PromptUser->GetCharacter())) {
+	// if the user is not overlapping the climb volume he/she can't use the ladder
+	if (!ClimbVolume->IsOverlappingActor(PromptUser->GetCharacter())) {
 		return false;
 	}
 
@@ -133,6 +137,7 @@ bool ALadder::OnUsed(AController* NewUser)
 		}
 		else {
 			moveComp->SetMovementMode(EMovementMode::MOVE_Custom, (uint8)ECustomMovementMode::EClimbingLadder);
+			character->SetIsClimbingLadder(true);
 		}
 	}
 

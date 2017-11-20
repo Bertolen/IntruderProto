@@ -413,8 +413,8 @@ void AIntruderProtoCharacter::OnOverlapEnd(class UPrimitiveComponent* Overlapped
 {
 	if (bIsClimbingLadder) {
 		ALadder* Ladder = Cast<ALadder>(OtherActor);
-		UBoxComponent* triggerBox = Cast<UBoxComponent>(OtherComp);
-		if (triggerBox && Ladder && Ladder == Cast<ALadder>(OnUseUsable)) {
+		UBoxComponent* climbVolume = Cast<UBoxComponent>(OtherComp);
+		if (climbVolume && Ladder && Ladder == Cast<ALadder>(OnUseUsable)) {
 			SetIsClimbingLadder(false);
 			OnUseUsable->OnReleased(GetController());
 			OnUseUsable = NULL;

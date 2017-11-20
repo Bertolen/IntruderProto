@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Usables/Usable.h"
+#include "Components/ArrowComponent.h"
 #include "Ladder.generated.h"
 
 class UInstancedStaticMeshComponent;
@@ -28,22 +29,24 @@ public:
 
 	virtual void OnConstruction(const FTransform &Transform) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder", meta = (AllowPrivateAccess = "true"))
+	FORCEINLINE FVector GetInward() const { return InwardArrow->GetComponentRotation().Vector(); }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder")
 	int AmountLadderMeshes;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder")
 	float MeshHeight;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder")
 	float ReachX;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable|Ladder")
 	float ReachY;
 
 protected:
 	// The trigger space inside which the player can climb the ladder
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable", meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* TriggerBox;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable")
+	class UBoxComponent* ClimbVolume;
 
 	// The meshes for our procedural generation
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable|Meshes")
@@ -62,4 +65,7 @@ private:
 	// The trigger space inside which the player can climb the ladder
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable", meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* Root;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* InwardArrow;
 };
