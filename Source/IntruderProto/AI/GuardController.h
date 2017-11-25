@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "GuardController.generated.h"
 
 /**
@@ -15,37 +14,17 @@ class INTRUDERPROTO_API AGuardController : public AAIController
 {
 	GENERATED_BODY()
 
-	// class constructor
-	AGuardController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UBehaviorTree* BTAsset;
 
-	/* Called whenever the controller possesses a character bot */
-	virtual void Possess(class APawn* InPawn) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
+	UBlackboardData* BlackboardAsset;
 
-	virtual void UnPossess() override;
-
-	UBehaviorTreeComponent* BehaviorComp;
-
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+private:
+	UPROPERTY()
 	UBlackboardComponent* BlackboardComp;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI")
-		FName TargetEnemyKeyName;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI")
-		FName PatrolLocationKeyName;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI")
-		FName CurrentWaypointKeyName;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI")
-		FName BotTypeKeyName;
-
-public:
-	/** Returns BehaviorComp subobject **/
-	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return BehaviorComp; }
-
-	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
-
-	void SetTargetEnemy(APawn* NewTarget);
-
-	//void SetBlackboardBotType(EBotBehaviorType NewType);
 };
