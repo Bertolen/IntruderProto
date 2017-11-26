@@ -8,14 +8,10 @@
 #include "IntruderProtoGameMode.h"
 
 // Sets default values
-AUsable::AUsable()
+AUsable::AUsable(const FObjectInitializer& ObjectInitializer) : Super (ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	// Create the static mesh component
-	//UsableMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UsableMesh"));
-	//RootComponent = UsableMesh;
 
 	// The label to be used to display
 	UsableLabel = "usable";
@@ -45,12 +41,10 @@ bool AUsable::OnUsed(AController* NewUser)
 
 void AUsable::OnReleased(AController* OldUser)
 {
-	if (user == OldUser) {
-		user = NULL;
-	}
-	else {
+	if (user != OldUser) {
 		UE_LOG(LogClass, Log, TEXT("ERROR : Releasing a usable from a controller that's not using it!!!"));
 	}
+	user = NULL;
 }
 
 void AUsable::DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser)

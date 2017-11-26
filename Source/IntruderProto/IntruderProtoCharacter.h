@@ -159,7 +159,11 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	FORCEINLINE class AUsable* GetOnUseUsable() const { return OnUseUsable;  }
+	FORCEINLINE class AUsable* GetOnUseUsable() const { return OnUseUsable; }
+
+	FORCEINLINE class UPhysicsHandleComponent* GetGrabHandle() const { return GrabHandle; }
+
+	FORCEINLINE float GetThrowForce() const { return ThrowForce; }
 
 protected:
 	// Usable item on focus
@@ -172,13 +176,29 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Hability")
 	virtual void Use();
 
+	// This method uses the usable item on focus
+	UFUNCTION(BlueprintCallable, Category = "Hability")
+	virtual void Throw();
+
 private:
 	// is the character actually climbing a ladder?
 	UPROPERTY()
 	bool bIsClimbingLadder;
 
 	// is the character actually climbing a ladder?
-	UPROPERTY(EditDefaultsOnly, Category = "Hability")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hability", meta = (AllowPrivateAccess = "true"))
 	float UsingReach;
+
+	// Distance at which the player holds objects
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	float GrabDistance;
+
+	// The force used to throw objects
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	float ThrowForce;
+
+	//Physics handle used to grab objects
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	class UPhysicsHandleComponent* GrabHandle;
 };
 

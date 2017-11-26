@@ -13,6 +13,8 @@
 #include "MyCharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Usables/Ladder.h"
+#include "Usables/Throwable.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -90,8 +92,13 @@ AIntruderProtoCharacter::AIntruderProtoCharacter(const FObjectInitializer& Objec
 	//setup the overlap delegate
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this,&AIntruderProtoCharacter::OnOverlapEnd);
 
+	//init the grab handle
+	GrabHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("GrabHandle"));
+
 	//Init our values
 	UsingReach = 150.0f;
+	GrabDistance = 100.0f;
+	ThrowForce = 50000.0f;
 }
 
 void AIntruderProtoCharacter::BeginPlay()
@@ -150,6 +157,7 @@ void AIntruderProtoCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	// bind special actions
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed,this, &AIntruderProtoCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AIntruderProtoCharacter::Use);
+	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &AIntruderProtoCharacter::Throw);
 }
 
 void AIntruderProtoCharacter::OnFire()
@@ -335,6 +343,15 @@ void AIntruderProtoCharacter::Use()
 	OnUseUsable->OnUsed(Controller);
 }
 
+void AIntruderProtoCharacter::Throw()
+{
+	AThrowable *isThrowable = Cast<AThrowable>(OnUseUsable);
+	if (isThrowable) {
+		OnUseUsable->OnReleased(GetController());
+		OnUseUsable = NULL;
+	}
+}
+
 void AIntruderProtoCharacter::Jump()
 {
 	if (bIsClimbingLadder) {
@@ -366,12 +383,13 @@ void AIntruderProtoCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	FVector CamLoc;
+	FRotator CamRot;
+
+	Controller->GetPlayerViewPoint(CamLoc, CamRot); // Get the camera position and rotation
+
 	// we check the controller because we dont want bots to grab the use object and we need a controller for the Getplayerviewpoint function
 	if (Controller && Controller->IsLocalPlayerController()) {
-		FVector CamLoc;
-		FRotator CamRot;
-
-		Controller->GetPlayerViewPoint(CamLoc, CamRot); // Get the camera position and rotation
 		const FVector StartTrace = CamLoc; // trace start is the camera location
 		const FVector Direction = CamRot.Vector();
 		const FVector EndTrace = StartTrace + Direction * UsingReach; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
@@ -398,6 +416,10 @@ void AIntruderProtoCharacter::Tick(float DeltaSeconds)
 			FocusedUsable = NULL;
 		}		
 	}
+
+	//Update the grad handle position
+	FVector NewGrabLocation = CamLoc + CamRot.Vector() * GrabDistance;
+	GrabHandle->SetTargetLocationAndRotation(NewGrabLocation, CamRot);
 }
 
 void AIntruderProtoCharacter::SetIsClimbingLadder(const bool &NewIsClimbingLadder)

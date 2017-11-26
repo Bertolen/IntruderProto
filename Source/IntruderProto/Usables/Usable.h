@@ -14,7 +14,7 @@ class INTRUDERPROTO_API AUsable : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	AUsable();
+	AUsable(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	///////////////////////////////////////////////////////////////////////
 
@@ -39,14 +39,10 @@ public:
 	
 protected:
 	// Usable label to display
-	UPROPERTY(EditDefaultsOnly, Category = "Usable")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Usable", meta = (AllowPrivateAcces = "true"))
 	FString UsableLabel;
 	
 private:
-	/** Static mesh to represent the pickup in the level*/
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Usable", meta = (AllowPrivateAccess = "true"))
-	//class UStaticMeshComponent* UsableMesh;
-
 	// contains the current user
 	UPROPERTY(VisibleAnywhere, Category = "Usable")
 	AController* user;
