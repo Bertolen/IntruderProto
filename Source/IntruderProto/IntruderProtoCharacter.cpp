@@ -96,9 +96,9 @@ AIntruderProtoCharacter::AIntruderProtoCharacter(const FObjectInitializer& Objec
 	GrabHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("GrabHandle"));
 
 	//Init our values
-	UsingReach = 150.0f;
-	GrabDistance = 100.0f;
-	ThrowForce = 50000.0f;
+	UsingReach = 200.0f;
+	GrabDistance = 200.0f;
+	ThrowForce = 20000.0f;
 }
 
 void AIntruderProtoCharacter::BeginPlay()
