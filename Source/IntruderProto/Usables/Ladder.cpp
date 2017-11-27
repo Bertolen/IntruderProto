@@ -100,6 +100,7 @@ void ALadder::OnConstruction(const FTransform &Transform)
 	extents.X = ReachX;
 	ClimbVolume->SetBoxExtent(extents);
 	ClimbVolume->SetRelativeLocation(FVector(0.0f, 0.0f, boxCenter));
+	InwardArrow->SetRelativeLocation(FVector(0.0f, 0.0f, boxCenter));
 }
 
 bool ALadder::CanBeUsed(AController* PromptUser)
