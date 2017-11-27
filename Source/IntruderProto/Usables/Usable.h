@@ -20,13 +20,13 @@ public:
 
 public:
 	// This function can be called to know if the object can be used or not by th given controller
-	virtual bool CanBeUsed(AController* user);
+	virtual bool CanBeUsed(AController* PromptUser);
 
-	// This function will be called when the user uses the object
-	virtual bool OnUsed(AController* user);
+	// This function will be called when the user uses the object, it returns true upon success
+	virtual bool OnUsed(AController* Newuser);
 
 	// This function will be called when the user releases the object
-	virtual void OnReleased(AController* user);
+	virtual void OnReleased(AController* OldUser);
 
 	// This function is called each frame by the HUD, it should be used to put messages to the screen, like the USE promt in UDK
 	virtual void DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser);

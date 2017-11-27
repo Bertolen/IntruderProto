@@ -340,7 +340,11 @@ void AIntruderProtoCharacter::Use()
 	}
 
 	OnUseUsable = FocusedUsable;
-	OnUseUsable->OnUsed(Controller);
+
+	// If the call fails then we don't record the object as been used
+	if (!OnUseUsable->OnUsed(Controller)) {
+		OnUseUsable = NULL;
+	}
 }
 
 void AIntruderProtoCharacter::Throw()

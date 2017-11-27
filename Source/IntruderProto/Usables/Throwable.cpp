@@ -21,26 +21,25 @@ AThrowable::AThrowable(const FObjectInitializer& ObjectInitializer) : Super(Obje
 	UsableMesh->SetupAttachment(GetRootComponent());
 }
 
-bool AThrowable::OnUsed(AController* user)
+bool AThrowable::OnUsed(AController* NewUser)
 {
-	if (!Super::OnUsed(user))
+	if (!Super::OnUsed(NewUser))
 		return false;
 
-	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(user->GetCharacter());
+	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(NewUser->GetCharacter());
 	if (!character)
 		return false;
 
-	//character->GetGrabHandle()->GrabComponent(UsableMesh, FName(""), GetActorLocation(), true);
 	character->GetGrabHandle()->GrabComponentAtLocation(UsableMesh, FName(""), GetActorLocation());
 
 	return true;
 }
 
-void AThrowable::OnReleased(AController* user)
+void AThrowable::OnReleased(AController* OldUser)
 {
-	Super::OnReleased(user);
+	Super::OnReleased(OldUser);
 
-	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(user->GetCharacter());
+	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(OldUser->GetCharacter());
 	if (!character)
 		return;
 

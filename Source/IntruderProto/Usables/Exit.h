@@ -18,7 +18,7 @@ class INTRUDERPROTO_API AExit : public AUsable
 
 public:
 	// This function will be called when the user uses the object
-	virtual bool OnUsed(AController* user);
+	virtual bool OnUsed(AController* NewUser);
 
 	// This function is called each frame by the HUD, it should be used to put messages to the screen, like the USE promt in UDK
 	virtual void DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser) override;

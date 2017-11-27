@@ -18,10 +18,10 @@ class INTRUDERPROTO_API AThrowable : public AUsable
 
 public:
 	// This function will be called when the user uses the object
-	virtual bool OnUsed(AController* user);
+	virtual bool OnUsed(AController* NewUser);
 
 	// This function will be called when the user releases the object
-	virtual void OnReleased(AController* user) override;
+	virtual void OnReleased(AController* Oldser) override;
 	
 	// This function is called each frame by the HUD, it should be used to put messages to the screen, like the USE promt in UDK
 	virtual void DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser) override;

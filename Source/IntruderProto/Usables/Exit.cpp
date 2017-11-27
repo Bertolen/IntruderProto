@@ -18,9 +18,9 @@ AExit::AExit(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitiali
 	ExitMesh->SetupAttachment(GetRootComponent());
 }
 
-bool AExit::OnUsed(AController* user)
+bool AExit::OnUsed(AController* NewUser)
 {
-	if (!Super::OnUsed(user) || LevelDestination == "")
+	if (!Super::OnUsed(NewUser) || LevelDestination == "")
 		return false;
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelDestination);

@@ -4,14 +4,14 @@
 #include "Engine/Canvas.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/PlayerInput.h"
-#include "Kismet/GameplayStatics.h"
 #include "IntruderProtoGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AUsable::AUsable(const FObjectInitializer& ObjectInitializer) : Super (ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// The label to be used to display
 	UsableLabel = "usable";
