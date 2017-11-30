@@ -322,36 +322,34 @@ void AIntruderProtoCharacter::ToggleCrouch()
 
 void AIntruderProtoCharacter::Use()
 {
-	// we access the usable item, make sure we have one, else we will crash
-	if (FocusedUsable == NULL) {
-		return;
-	}
-
-	if (!FocusedUsable->CanBeUsed(this->GetController())) {
-		return;
-	}
-
+	AUsable* OldUsable = NULL;
+	// Starts by releasing the currently used object
 	if (OnUseUsable != NULL) {
 		OnUseUsable->OnReleased(GetController());
+		OldUsable = OnUseUsable;
+		OnUseUsable = NULL;
 
 		if (bIsClimbingLadder) {
 			SetIsClimbingLadder(false);
 		}
 	}
 
-	OnUseUsable = FocusedUsable;
+	// we access the usable item, make sure we have one, else we will crash
+	if (FocusedUsable != NULL && FocusedUsable != OldUsable && FocusedUsable->CanBeUsed(GetController())) {
+		OnUseUsable = FocusedUsable;
 
-	// If the call fails then we don't record the object as been used
-	if (!OnUseUsable->OnUsed(Controller)) {
-		OnUseUsable = NULL;
+		// If the call returns false then the object does not stays in use
+		if (!OnUseUsable->OnUsed(Controller)) {
+			OnUseUsable = NULL;
+		}
 	}
 }
 
 void AIntruderProtoCharacter::Throw()
 {
-	AThrowable *isThrowable = Cast<AThrowable>(OnUseUsable);
-	if (isThrowable) {
-		OnUseUsable->OnReleased(GetController());
+	AThrowable *Throwable = Cast<AThrowable>(OnUseUsable);
+	if (Throwable) {
+		Throwable->OnThrow(GetController());
 		OnUseUsable = NULL;
 	}
 }

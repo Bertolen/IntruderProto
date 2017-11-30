@@ -44,6 +44,16 @@ void AThrowable::OnReleased(AController* OldUser)
 		return;
 
 	character->GetGrabHandle()->ReleaseComponent();
+}
+
+void AThrowable::OnThrow(AController* OldUser)
+{
+	OnReleased(OldUser);
+
+	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(OldUser->GetCharacter());
+	if (!character)
+		return;
+
 	UsableMesh->AddImpulse(character->GetFirstPersonCameraComponent()->GetForwardVector() * character->GetThrowForce());
 }
 
@@ -58,8 +68,9 @@ void AThrowable::DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser)
 		}
 
 		// prepare the dynamic string to display
-		FString key = playerController->PlayerInput->GetKeysForAction("Throw")[0].Key.ToString();
-		FString text = key + " : throw " + UsableLabel;
+		FString ThrowKey = playerController->PlayerInput->GetKeysForAction("Throw")[0].Key.ToString();
+		FString ReleaseKey = playerController->PlayerInput->GetKeysForAction("Use")[0].Key.ToString();
+		FString text = ThrowKey + " : throw " + UsableLabel + '\n' + ReleaseKey + " : release " + UsableLabel;
 
 		AIntruderProtoGameMode* gameMode = Cast<AIntruderProtoGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (!gameMode) {
