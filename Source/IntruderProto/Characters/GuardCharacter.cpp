@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GuardCharacter.h"
-// Sensing Components
+// Components
 #include "Perception/PawnSensingComponent.h"
 // AI
 #include "AI/GuardController.h"
+// Others
+#include "TimerManager.h"
 
 // Sets default values
 AGuardCharacter::AGuardCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -78,4 +80,17 @@ void AGuardCharacter::OnHearNoise(APawn* PawnInstigator, const FVector& Location
 	if (GuardController) {
 		GuardController->SetTargetLocation(Location);
 	}
+}
+
+void AGuardCharacter::OnMeleeCompBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	Super::OnMeleeCompBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	/* Stop any running attack timers */
+	TimerHandle_MeleeAttack.Invalidate();
+
+	PerformMeleeStrike(OtherActor);
+
+	/* Set re-trigger timer to re-check overlapping pawns at melee attack rate interval */
+	GetWorldTimerManager().SetTimer(TimerHandle_MeleeAttack, this, &AGuardCharacter::OnRetriggerMeleeStrike, MeleeStrikeCooldown, true);
 }

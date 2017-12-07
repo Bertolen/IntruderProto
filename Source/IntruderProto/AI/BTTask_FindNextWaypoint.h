@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "IntruderProto/AI/GuardCharacter.h"
+#include "Characters/GuardCharacter.h"
 #include "BTTask_FindNextWaypoint.generated.h"
 
 /**

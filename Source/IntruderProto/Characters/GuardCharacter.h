@@ -37,6 +37,10 @@ protected:
 	UFUNCTION()
 	virtual void OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume);
 
+	/* A pawn is in melee range */
+	UFUNCTION()
+	virtual void OnMeleeCompBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
+	
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
 	class UPawnSensingComponent* PerceptionComponent;

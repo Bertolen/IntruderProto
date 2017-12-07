@@ -24,7 +24,7 @@ EBTNodeResult::Type UBTTask_RapidMoveTo::ExecuteTask(UBehaviorTreeComponent& Own
 
 	AActor* goal = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID()));
 
-	EPathFollowingRequestResult::Type movementResult = ControllerRef->MoveToActor(goal, 50);
+	EPathFollowingRequestResult::Type movementResult = ControllerRef->MoveToActor(goal, 35);
 
 	return EBTNodeResult::Succeeded;
 }

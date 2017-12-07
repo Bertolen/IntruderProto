@@ -2,7 +2,6 @@
 
 #include "IntruderProtoGameMode.h"
 #include "IntruderProtoHUD.h"
-#include "IntruderProtoCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 
