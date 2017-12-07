@@ -6,7 +6,7 @@
 #include "TextureResource.h"
 #include "CanvasItem.h"
 #include "UObject/ConstructorHelpers.h"
-#include "IntruderProtoCharacter.h"
+#include "Characters/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "IntruderProtoGameMode.h"
 
@@ -36,7 +36,8 @@ void AIntruderProtoHUD::DrawHUD()
 	TileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem( TileItem );
 
-	AIntruderProtoCharacter* player = Cast<AIntruderProtoCharacter>(GetOwningPawn());
+	// Display the usable text
+	APlayerCharacter* player = Cast<APlayerCharacter>(GetOwningPawn());
 	if (player && player->GetFocusedUsable() != NULL) {
 		player->GetFocusedUsable()->DisplayPrompt(Canvas, GetOwningPlayerController());
 	}

@@ -6,7 +6,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/PlayerInput.h"
-#include "IntruderProto/IntruderProtoCharacter.h"
+#include "Characters/PlayerCharacter.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "IntruderProtoGameMode.h"
 #include "Kismet/GameplayStatics.h"
@@ -26,7 +26,7 @@ bool AThrowable::OnUsed(AController* NewUser)
 	if (!Super::OnUsed(NewUser))
 		return false;
 
-	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(NewUser->GetCharacter());
+	APlayerCharacter *character = Cast<APlayerCharacter>(NewUser->GetCharacter());
 	if (!character)
 		return false;
 
@@ -39,7 +39,7 @@ void AThrowable::OnReleased(AController* OldUser)
 {
 	Super::OnReleased(OldUser);
 
-	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(OldUser->GetCharacter());
+	APlayerCharacter *character = Cast<APlayerCharacter>(OldUser->GetCharacter());
 	if (!character)
 		return;
 
@@ -50,7 +50,7 @@ void AThrowable::OnThrow(AController* OldUser)
 {
 	OnReleased(OldUser);
 
-	AIntruderProtoCharacter *character = Cast<AIntruderProtoCharacter>(OldUser->GetCharacter());
+	APlayerCharacter *character = Cast<APlayerCharacter>(OldUser->GetCharacter());
 	if (!character)
 		return;
 

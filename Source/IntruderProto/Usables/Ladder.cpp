@@ -2,7 +2,7 @@
 
 #include "Ladder.h"
 #include "GameFramework/PlayerController.h"
-#include "IntruderProtoCharacter.h"
+#include "Characters/PlayerCharacter.h"
 #include "MyCharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
@@ -125,7 +125,7 @@ bool ALadder::OnUsed(AController* NewUser)
 		return false;
 	}
 
-	AIntruderProtoCharacter* character = Cast<AIntruderProtoCharacter>(NewUser->GetCharacter());
+	APlayerCharacter* character = Cast<APlayerCharacter>(NewUser->GetCharacter());
 	if (!character) {
 		OnReleased(NewUser);
 		return false;

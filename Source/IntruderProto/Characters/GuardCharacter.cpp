@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GuardCharacter.h"
-#include "GuardController.h"
 // Sensing Components
 #include "Perception/PawnSensingComponent.h"
+// AI
+#include "AI/GuardController.h"
 
 // Sets default values
 AGuardCharacter::AGuardCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

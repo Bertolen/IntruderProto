@@ -3,7 +3,7 @@
 #include "MyCharacterMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
-#include "IntruderProtoCharacter.h"
+#include "Characters/PlayerCharacter.h"
 #include "Usables/Ladder.h"
 #include "GameFramework/PhysicsVolume.h"
 
@@ -287,7 +287,7 @@ void UMyCharacterMovementComponent::PhysClimbingLadder(float deltaTime, int32 It
 		Velocity.X = 0;
 		Velocity.Y = 0;
 		if (Velocity.Z > 0.0f) {
-			AIntruderProtoCharacter* character = Cast<AIntruderProtoCharacter>(GetOwner());
+			APlayerCharacter* character = Cast<APlayerCharacter>(GetOwner());
 			if (!character)
 				return;
 

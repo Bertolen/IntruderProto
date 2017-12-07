@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Characters/BaseCharacter.h"
 #include "GuardCharacter.generated.h"
 
 UCLASS()
-class INTRUDERPROTO_API AGuardCharacter : public ACharacter
+class INTRUDERPROTO_API AGuardCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 

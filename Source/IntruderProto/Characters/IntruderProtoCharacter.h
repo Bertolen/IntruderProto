@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "Usables/Usable.h"
+#include "Characters/BaseCharacter.h"
 #include "IntruderProtoCharacter.generated.h"
 
 class UInputComponent;
 
 UCLASS(config=Game)
-class AIntruderProtoCharacter : public ACharacter
+class AIntruderProtoCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
