@@ -85,7 +85,7 @@ float ABaseCharacter::TakeDamage(float Damage, struct FDamageEvent const& Damage
 
 			if (bCanDie)
 			{
-				//Die(ActualDamage, DamageEvent, EventInstigator, DamageCauser);
+				Die(ActualDamage, DamageEvent, EventInstigator, DamageCauser);
 			}
 			else
 			{
@@ -120,7 +120,7 @@ bool ABaseCharacter::Die(float KillingDamage, FDamageEvent const& DamageEvent, A
 	Killer = GetDamageInstigator(Killer, *DamageType);
 
 	/* Notify the gamemode we got killed for scoring and game over state */
-	//AController* KilledPlayer = Controller ? Controller : Cast<AController>(GetOwner());
+	AController* KilledPlayer = Controller ? Controller : Cast<AController>(GetOwner());
 	//GetWorld()->GetAuthGameMode<ASGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
 
 	OnDeath(KillingDamage, DamageEvent, Killer ? Killer->GetPawn() : NULL, DamageCauser);
@@ -195,20 +195,21 @@ void ABaseCharacter::OnDeath(float KillingDamage, FDamageEvent const& DamageEven
 	bReplicateMovement = false;
 	bTearOff = true;
 	bIsDying = true;
-
+	
 	//PlayHit(KillingDamage, DamageEvent, PawnInstigator, DamageCauser, true); // sounds
 
-	DetachFromControllerPendingDestroy();
+	//DetachFromControllerPendingDestroy();
 
 	/* Disable all collision on capsule */
 	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
 	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	USkeletalMeshComponent* Mesh3P = GetMesh();
-	if (Mesh3P)
+	USkeletalMeshComponent* Mesh1P = GetMesh();
+	if (Mesh1P)
 	{
-		Mesh3P->SetCollisionProfileName(TEXT("Ragdoll"));
+		Mesh1P->SetOwnerNoSee(false);
+		Mesh1P->SetCollisionProfileName(TEXT("Ragdoll"));
 	}
 	SetActorEnableCollision(true);
 
@@ -220,14 +221,14 @@ void ABaseCharacter::OnDeath(float KillingDamage, FDamageEvent const& DamageEven
 		FPointDamageEvent PointDmg = *((FPointDamageEvent*)(&DamageEvent));
 		{
 			// TODO: Use DamageTypeClass->DamageImpulse
-			Mesh3P->AddImpulseAtLocation(PointDmg.ShotDirection * 12000, PointDmg.HitInfo.ImpactPoint, PointDmg.HitInfo.BoneName);
+			Mesh1P->AddImpulseAtLocation(PointDmg.ShotDirection * 12000, PointDmg.HitInfo.ImpactPoint, PointDmg.HitInfo.BoneName);
 		}
 	}
 	if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
 		FRadialDamageEvent RadialDmg = *((FRadialDamageEvent const*)(&DamageEvent));
 		{
-			Mesh3P->AddRadialImpulse(RadialDmg.Origin, RadialDmg.Params.GetMaxRadius(), 100000 /*RadialDmg.DamageTypeClass->DamageImpulse*/, ERadialImpulseFalloff::RIF_Linear);
+			Mesh1P->AddRadialImpulse(RadialDmg.Origin, RadialDmg.Params.GetMaxRadius(), 100000 /*RadialDmg.DamageTypeClass->DamageImpulse*/, ERadialImpulseFalloff::RIF_Linear);
 		}
 	}
 }
@@ -235,22 +236,22 @@ void ABaseCharacter::OnDeath(float KillingDamage, FDamageEvent const& DamageEven
 void ABaseCharacter::SetRagdollPhysics()
 {
 	bool bInRagdoll = false;
-	USkeletalMeshComponent* Mesh3P = GetMesh();
+	USkeletalMeshComponent* Mesh1P = GetMesh();
 
 	if (IsPendingKill())
 	{
 		bInRagdoll = false;
 	}
-	else if (!Mesh3P || !Mesh3P->GetPhysicsAsset())
+	else if (!Mesh1P || !Mesh1P->GetPhysicsAsset())
 	{
 		bInRagdoll = false;
 	}
 	else
 	{
-		Mesh3P->SetAllBodiesSimulatePhysics(true);
-		Mesh3P->SetSimulatePhysics(true);
-		Mesh3P->WakeAllRigidBodies();
-		Mesh3P->bBlendPhysics = true;
+		Mesh1P->SetAllBodiesSimulatePhysics(true);
+		Mesh1P->SetSimulatePhysics(true);
+		Mesh1P->WakeAllRigidBodies();
+		Mesh1P->bBlendPhysics = true;
 
 		bInRagdoll = true;
 	}
