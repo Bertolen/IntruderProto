@@ -17,6 +17,10 @@ class INTRUDERPROTO_API UBTTask_RapidMoveTo : public UBTTask_BlackboardBase
 
 	UBTTask_RapidMoveTo(const FObjectInitializer& ObjectInitializer);
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AcceptableDistance;
+
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 

@@ -11,6 +11,7 @@
 UBTTask_RapidMoveTo::UBTTask_RapidMoveTo(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	NodeName = "Rapid Move To";
+	AcceptableDistance = 100.0f;
 }
 
 EBTNodeResult::Type UBTTask_RapidMoveTo::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -24,7 +25,7 @@ EBTNodeResult::Type UBTTask_RapidMoveTo::ExecuteTask(UBehaviorTreeComponent& Own
 
 	AActor* goal = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID()));
 
-	EPathFollowingRequestResult::Type movementResult = ControllerRef->MoveToActor(goal, 35);
+	EPathFollowingRequestResult::Type movementResult = ControllerRef->MoveToActor(goal, AcceptableDistance);
 
 	return EBTNodeResult::Succeeded;
 }
