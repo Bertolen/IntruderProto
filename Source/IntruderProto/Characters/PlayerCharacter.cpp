@@ -60,6 +60,9 @@ APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	//init the grab handle
 	GrabHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("GrabHandle"));
 
+	// The player can crouch
+	GetMovementComponent()->NavAgentProps.bCanCrouch = true;
+
 	//Init our values
 	UsingReach = 200.0f;
 	GrabDistance = 200.0f;
@@ -256,4 +259,16 @@ void APlayerCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, c
 			OnUseUsable = NULL;
 		}
 	}
+}
+
+void APlayerCharacter::MakePawnNoise(float Loudness)
+{
+	if (Role == ROLE_Authority)
+	{
+		/* Make noise to be picked up by PawnSensingComponent by the enemy pawns */
+		MakeNoise(Loudness, this, GetActorLocation());
+	}
+
+	//LastNoiseLoudness = Loudness;
+	//LastMakeNoiseTime = GetWorld()->GetTimeSeconds();
 }

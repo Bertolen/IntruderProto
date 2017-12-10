@@ -4,6 +4,7 @@
 //#include "IntruderProto/IntruderProtoGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
 
@@ -21,6 +22,9 @@ ABaseCharacter::ABaseCharacter(const FObjectInitializer& ObjectInitializer) : Su
 	MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	MeleeCollisionComp->SetupAttachment(GetCapsuleComponent());
+
+	/* noise emitter comp*/
+	NoiseEmitterComp = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComp"));
 
 	//Setting up the variables default values
 	MaxHealthPoints = 100.0f;

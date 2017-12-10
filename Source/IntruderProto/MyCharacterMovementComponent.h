@@ -22,6 +22,8 @@ class INTRUDERPROTO_API UMyCharacterMovementComponent : public UCharacterMovemen
 {
 	GENERATED_BODY()
 
+	UMyCharacterMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 public:
 
 	// Crouching

@@ -7,6 +7,12 @@
 #include "Usables/Ladder.h"
 #include "GameFramework/PhysicsVolume.h"
 
+UMyCharacterMovementComponent::UMyCharacterMovementComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	// Set up the default variables values
+	CrouchingSpeed = 100.0f;
+}
+
 void UMyCharacterMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	// puting DeltaTime on a variable that our (un)crouching methods can access

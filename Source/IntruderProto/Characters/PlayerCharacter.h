@@ -80,15 +80,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	FORCEINLINE AUsable* GetFocusedUsable() const { return FocusedUsable; }
-
-	FORCEINLINE bool GetIsClimbingLadder() const { return bIsClimbingLadder; }
-
 	UFUNCTION()
 	void SetIsClimbingLadder(const bool &NewIsClimbingLadder);
 
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	/* MakeNoise hook to trigger AI noise emitting (Loudness between 0.0-1.0)  */
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	void MakePawnNoise(float Loudness);
+
+	// Inlines
+	
+	FORCEINLINE AUsable* GetFocusedUsable() const { return FocusedUsable; }
+
+	FORCEINLINE bool GetIsClimbingLadder() const { return bIsClimbingLadder; }
 
 	FORCEINLINE class AUsable* GetOnUseUsable() const { return OnUseUsable; }
 

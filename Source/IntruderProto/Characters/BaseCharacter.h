@@ -100,4 +100,8 @@ private:
 	/* Timer handle to manage buffered melee attacks */
 	UPROPERTY()
 	FTimerHandle TimerHandle_MeleeAttackOnHold;
+
+	/* Tracks noise data used by the pawn sensing component */
+	UPROPERTY()
+	UPawnNoiseEmitterComponent* NoiseEmitterComp;
 };
