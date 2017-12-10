@@ -102,6 +102,8 @@ public:
 
 	FORCEINLINE float GetThrowForce() const { return ThrowForce; }
 
+	FORCEINLINE class UInventoryComponent* GetInventory() const { return Inventory; }
+
 protected:
 	// Usable item on focus
 	AUsable* FocusedUsable;
@@ -136,5 +138,9 @@ private:
 
 	//Physics handle used to grab objects
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
-	class UPhysicsHandleComponent* GrabHandle;	
+	class UPhysicsHandleComponent* GrabHandle;
+
+	//Physics handle used to grab objects
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* Inventory;
 };

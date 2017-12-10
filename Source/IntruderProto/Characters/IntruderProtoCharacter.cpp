@@ -10,7 +10,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
-#include "MyCharacterMovementComponent.h"
+#include "Components/MyCharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Usables/Ladder.h"
 #include "Usables/Throwable.h"

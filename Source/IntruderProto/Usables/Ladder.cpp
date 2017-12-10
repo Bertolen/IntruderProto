@@ -3,7 +3,7 @@
 #include "Ladder.h"
 #include "GameFramework/PlayerController.h"
 #include "Characters/PlayerCharacter.h"
-#include "MyCharacterMovementComponent.h"
+#include "Components/MyCharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"

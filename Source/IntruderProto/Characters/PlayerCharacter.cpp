@@ -10,7 +10,8 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
-#include "MyCharacterMovementComponent.h"
+#include "Components/MyCharacterMovementComponent.h"
+#include "Components/InventoryComponent.h"
 #include "Components/BoxComponent.h"
 #include "Usables/Ladder.h"
 #include "Usables/Throwable.h"
@@ -39,26 +40,19 @@ APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	FirstPersonCameraComponent->RelativeLocation = FVector(0.0f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	GetMesh()->SetOwnerNoSee(true);
 	GetMesh()->RelativeLocation = FVector(0.0f, 0.0f, -90.0f);
 	GetMesh()->RelativeRotation = FRotator(0.0f, 0.0f, -90.0f);
-
-	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
-	/*
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	Mesh1P->RelativeRotation = FRotator(1.9f, -19.19f, 5.2f);
-	Mesh1P->RelativeLocation = FVector(-0.5f, -4.4f, -155.7f);
-	*/
 
 	//setup the overlap delegate
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
 	//init the grab handle
 	GrabHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("GrabHandle"));
+
+	// Init the inventory
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
 	// The player can crouch
 	GetMovementComponent()->NavAgentProps.bCanCrouch = true;
