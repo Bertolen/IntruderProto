@@ -17,9 +17,10 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
-	bool AddItem(APickup* NewItem, int Amount = 1);
+	bool AddItem(TSubclassOf<APickup> ItemClass, int Amount = 1);
 
-	void RemoveItem(APickup* NewItem, int Amount = 1);
+	/* Removes items from the inventory, returns whether or not there are still some items of this kind in the inventory */
+	bool RemoveItem(TSubclassOf<APickup> ItemClass, int Amount = 1);
 
 	int GetIndex(TSubclassOf<APickup> ItemClass) const;
 

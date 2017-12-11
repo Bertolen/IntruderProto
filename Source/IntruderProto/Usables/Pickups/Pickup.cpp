@@ -18,7 +18,7 @@ APickup::APickup(const FObjectInitializer& ObjectInitializer) : Super(ObjectInit
 	// Create the static mesh component
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
 	PickupMesh->SetSimulatePhysics(true);
-	PickupMesh->SetupAttachment(GetRootComponent());
+	PickupMesh->SetupAttachment(RootComponent);
 }
 
 void APickup::DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser)
@@ -47,7 +47,7 @@ bool APickup::OnUsed(AController* NewUser)
 		return false;
 	}
 
-	if (character->GetInventory()->AddItem(this)) {
+	if (character->GetInventory()->AddItem(this->GetClass())) {
 		Destroy();
 	}
 

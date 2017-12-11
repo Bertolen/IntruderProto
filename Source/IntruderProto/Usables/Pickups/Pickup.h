@@ -23,7 +23,7 @@ public:
 	// This function will be called when the user uses the object, it returns true if the user equips the object
 	virtual bool OnUsed(AController* NewUser) override;
 
-private:
+protected:
 	/** Static mesh to represent the pickup in the level*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* PickupMesh;

@@ -24,34 +24,38 @@ void UInventoryComponent::BeginPlay()
 	
 }
 
-bool UInventoryComponent::AddItem(APickup* NewItem, int Amount)
+bool UInventoryComponent::AddItem(TSubclassOf<APickup> ItemClass, int Amount)
 {
 	int index;
-	if (Items.Find(NewItem->GetClass(), index)) // If a slot is already open
+	if (Items.Find(ItemClass, index)) // If a slot is already open
 	{
 		ItemsCarried[index] += Amount;
 		return true;
 	}
 	else if (Items.Num() < Size) { // If there's still an open slot
-		Items.Add(NewItem->GetClass());
+		Items.Add(ItemClass);
 		ItemsCarried.Add(Amount);
 		return true;
 	}
 	return false;
 }
 
-void UInventoryComponent::RemoveItem(APickup* NewItem, int Amount)
+/* Removes items from the inventory, returns whether or not there are still some items of this kind in the inventory */
+bool UInventoryComponent::RemoveItem(TSubclassOf<APickup> ItemClass, int Amount)
 {
 	int index;
-	if (Items.Find(NewItem->GetClass(), index)) // If a slot is already open
+	if (Items.Find(ItemClass, index)) // If a slot is already open
 	{
 		ItemsCarried[index] -= Amount;
 
 		if (ItemsCarried[index] <= 0) { // if there's no more of these items
 			ItemsCarried.RemoveAt(index);
 			Items.RemoveAt(index);
+			return false;
 		}
+		return true;
 	}
+	return false;
 }
 
 int UInventoryComponent::GetIndex(TSubclassOf<APickup> ItemClass) const

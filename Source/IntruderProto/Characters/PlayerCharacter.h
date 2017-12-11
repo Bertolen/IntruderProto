@@ -151,4 +151,8 @@ private:
 	/* Item currently equiped and ready to use */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class APickup> EquipedItem;
+
+	/** Item's spawn offset from the characters location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	FVector ItemSpawnOffset;
 };

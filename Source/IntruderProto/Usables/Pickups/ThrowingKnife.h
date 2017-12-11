@@ -18,5 +18,8 @@ public:
 	AThrowingKnife(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// This function will be called when the user releases the object
-	virtual void OnReleased(AController* OldUser) override;
+	virtual void OnReleased(AController* User) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float ImpulseForce;
 };
