@@ -14,9 +14,9 @@ class INTRUDERPROTO_API AThrowable : public AUsable
 {
 	GENERATED_BODY()
 
+public:
 	AThrowable(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-public:
 	// This function will be called when the user uses the object
 	virtual bool OnUsed(AController* NewUser);
 

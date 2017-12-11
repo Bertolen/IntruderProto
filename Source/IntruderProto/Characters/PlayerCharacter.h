@@ -119,6 +119,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Hability")
 	virtual void Throw();
 
+	// Scrolling the inventory
+	UFUNCTION(BlueprintCallable, Category = "Hability")
+	void ScrollInventory(float Value);
+
 private:
 	// is the character actually climbing a ladder?
 	UPROPERTY()
@@ -143,4 +147,8 @@ private:
 	//Physics handle used to grab objects
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* Inventory;
+
+	/* Item currently equiped and ready to use */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hability", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class APickup> EquipedItem;
 };

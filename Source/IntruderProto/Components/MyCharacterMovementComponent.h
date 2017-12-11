@@ -22,9 +22,8 @@ class INTRUDERPROTO_API UMyCharacterMovementComponent : public UCharacterMovemen
 {
 	GENERATED_BODY()
 
-	UMyCharacterMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
 public:
+	UMyCharacterMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// Crouching
 	virtual void Crouch(bool bClientSimulation) override;

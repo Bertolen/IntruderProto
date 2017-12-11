@@ -13,10 +13,10 @@ UCLASS()
 class INTRUDERPROTO_API ADoor : public AUsable
 {
 	GENERATED_BODY()
-	
-	ADoor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 public:
+	ADoor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 	// This function will be called when the user uses the object
 	virtual bool OnUsed(AController* NewUser);
 

@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InventoryComponent.h"
-#include "Usables/Pickups/Pickup.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -28,13 +27,13 @@ void UInventoryComponent::BeginPlay()
 bool UInventoryComponent::AddItem(APickup* NewItem, int Amount)
 {
 	int index;
-	if (Items.Find(NewItem->StaticClass(), index)) // If a slot is already open
+	if (Items.Find(NewItem->GetClass(), index)) // If a slot is already open
 	{
 		ItemsCarried[index] += Amount;
 		return true;
 	}
 	else if (Items.Num() < Size) { // If there's still an open slot
-		Items.AddUnique(NewItem->StaticClass());
+		Items.Add(NewItem->GetClass());
 		ItemsCarried.Add(Amount);
 		return true;
 	}
@@ -44,7 +43,7 @@ bool UInventoryComponent::AddItem(APickup* NewItem, int Amount)
 void UInventoryComponent::RemoveItem(APickup* NewItem, int Amount)
 {
 	int index;
-	if (Items.Find(NewItem->StaticClass(), index)) // If a slot is already open
+	if (Items.Find(NewItem->GetClass(), index)) // If a slot is already open
 	{
 		ItemsCarried[index] -= Amount;
 
@@ -53,4 +52,20 @@ void UInventoryComponent::RemoveItem(APickup* NewItem, int Amount)
 			Items.RemoveAt(index);
 		}
 	}
+}
+
+int UInventoryComponent::GetIndex(TSubclassOf<APickup> ItemClass) const
+{
+	return Items.Find(ItemClass);
+}
+
+TSubclassOf<APickup> UInventoryComponent::GetItemClassAtIndex(int Index) const
+{
+	if (Index < 0)
+		return nullptr;
+
+	if (Index >= Items.Num())
+		return nullptr;
+
+	return Items[Index];
 }

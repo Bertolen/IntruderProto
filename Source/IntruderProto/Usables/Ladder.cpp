@@ -8,7 +8,7 @@
 #include "Components/InstancedStaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-ALadder::ALadder()
+ALadder::ALadder(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// The label to be used to display
 	UsableLabel = "ladder";

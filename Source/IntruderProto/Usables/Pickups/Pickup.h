@@ -14,14 +14,14 @@ class INTRUDERPROTO_API APickup : public AUsable
 {
 	GENERATED_BODY()
 	
+public:
 	APickup(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-public:
-	// This function is called each frame by the HUD, it should be used to put messages to the screen, like the USE promt in UDK
-	virtual void DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser);
+	// This function is called each frame by the HUD, it should be used to put messages to the screen, like the USE prompt in UDK
+	virtual void DisplayPrompt(UCanvas* Canvas, AController* DisplayerUser) override;
 
 	// This function will be called when the user uses the object, it returns true if the user equips the object
-	virtual bool OnUsed(AController* NewUser);
+	virtual bool OnUsed(AController* NewUser) override;
 
 private:
 	/** Static mesh to represent the pickup in the level*/

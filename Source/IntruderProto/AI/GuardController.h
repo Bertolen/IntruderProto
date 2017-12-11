@@ -14,8 +14,6 @@ class INTRUDERPROTO_API AGuardController : public AAIController
 {
 	GENERATED_BODY()
 
-	AGuardController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BTAsset;
 
@@ -23,6 +21,8 @@ class INTRUDERPROTO_API AGuardController : public AAIController
 	UBlackboardData* BlackboardAsset;
 
 public:
+	AGuardController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 	void SetTargetToFollow(UObject* target);
 
 	void SetTargetLocation(FVector location);

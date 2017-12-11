@@ -61,6 +61,7 @@ APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	UsingReach = 200.0f;
 	GrabDistance = 200.0f;
 	ThrowForce = 20000.0f;
+	EquipedItem = nullptr;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -98,6 +99,8 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &APlayerCharacter::Use);
 	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &APlayerCharacter::Throw);
+
+	PlayerInputComponent->BindAxis("InventoryScroll", this, &APlayerCharacter::ScrollInventory);
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -132,6 +135,52 @@ void APlayerCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APlayerCharacter::ScrollInventory(float Value)
+{
+	if (Value > 0.0f) {
+
+		if (EquipedItem == nullptr) { // In case there's no currently equiped item we get the first item in the inventory
+			if (Inventory->GetUsedSlots() > 0)
+			{
+				EquipedItem = Inventory->GetItemClassAtIndex(0);
+			}
+		} 
+		else { // If there's an equiped item then we get the next item in the inventory
+			int index = Inventory->GetIndex(EquipedItem);
+			if (index != INDEX_NONE) {
+				if (Inventory->GetUsedSlots() > index + 1) {
+					EquipedItem = Inventory->GetItemClassAtIndex(index + 1);
+				}
+				else {
+					EquipedItem = nullptr;
+				}
+			}
+		}
+
+	}
+	else if (Value < 0.0f) { 
+
+		if (EquipedItem == nullptr) { // In case there's no currently equiped item we get the last item in the inventory
+			if (Inventory->GetUsedSlots() > 0)
+			{
+				EquipedItem = Inventory->GetItemClassAtIndex(Inventory->GetUsedSlots() - 1);
+			}
+		}
+		else { // If there's an equiped item then we get the previous item in the inventory
+			int index = Inventory->GetIndex(EquipedItem);
+			if (index != INDEX_NONE) {
+				if (index != 0) {
+					EquipedItem = Inventory->GetItemClassAtIndex(index - 1);
+				}
+				else {
+					EquipedItem = nullptr;
+				}
+			}
+		}
+
+	}
 }
 
 void APlayerCharacter::ToggleCrouch()

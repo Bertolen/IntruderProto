@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Usables/Pickups/Pickup.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -16,12 +17,18 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
-	bool AddItem(class APickup* NewItem, int Amount = 1);
+	bool AddItem(APickup* NewItem, int Amount = 1);
 
-	void RemoveItem(class APickup* NewItem, int Amount = 1);
+	void RemoveItem(APickup* NewItem, int Amount = 1);
+
+	int GetIndex(TSubclassOf<APickup> ItemClass) const;
+
+	TSubclassOf<APickup> GetItemClassAtIndex(int Index) const;
 
 	// Inlines
-	FORCEINLINE int GetSize() const { return Size; }
+	FORCEINLINE int GetMaxSize() const { return Size; }
+
+	FORCEINLINE int GetUsedSlots() const { return Items.Num(); }
 
 protected:
 	// Called when the game starts
@@ -33,7 +40,7 @@ private:
 	int Size;
 
 	UPROPERTY()
-	TArray<TSubclassOf<class APickup>> Items;
+	TArray<TSubclassOf<APickup>> Items;
 
 	UPROPERTY()
 	TArray<int> ItemsCarried;

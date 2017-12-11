@@ -18,7 +18,7 @@ class INTRUDERPROTO_API ALadder : public AUsable
 	GENERATED_BODY()
 
 public:
-	ALadder();
+	ALadder(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
 public:
 
