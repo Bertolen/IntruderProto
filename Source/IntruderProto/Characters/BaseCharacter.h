@@ -34,7 +34,9 @@ public:
 
 	FORCEINLINE bool IsAlive() const { return CurentHealthPoints > 0; }
 
-	void PerformMeleeStrikesOnHold();
+	void StartRunning();
+
+	void StopRunning();
 
 protected:
 	/* Space inside which we can hit our target */
@@ -67,6 +69,9 @@ protected:
 
 	UFUNCTION()
 	void OnRetriggerMeleeStrike();
+
+	/** Called via input to crouch or uncrouch. */
+	void ToggleCrouch();
 
 private:
 	/* Maximum amount of HP a character can have before dying */
@@ -104,4 +109,16 @@ private:
 	/* Tracks noise data used by the pawn sensing component */
 	UPROPERTY()
 	UPawnNoiseEmitterComponent* NoiseEmitterComp;
+
+
+	//////////////////////////
+	// Movement
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	float WalkingSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	float RunningSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bIsRunning;
 };

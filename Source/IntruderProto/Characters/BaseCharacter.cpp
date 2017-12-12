@@ -31,6 +31,12 @@ ABaseCharacter::ABaseCharacter(const FObjectInitializer& ObjectInitializer) : Su
 	StartingHealthPoints = MaxHealthPoints;
 	MeleeStrikeCooldown = 1.0f;
 	MeleeDamage = 24.0f;
+	WalkingSpeed = 300.0f;
+	RunningSpeed = 600.0f;
+	bIsRunning = false;
+
+	// Setup the speed for the editor
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +47,9 @@ void ABaseCharacter::BeginPlay()
 	// setup the HP
 	CurentHealthPoints = StartingHealthPoints;
 	
+	// Setting up the speed
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
+
 	/* This is the earliest moment we can bind our delegates to the component */
 	if (MeleeCollisionComp)
 	{
@@ -65,6 +74,23 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ABaseCharacter::OnMeleeCompBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 
+}
+
+void ABaseCharacter::StartRunning()
+{
+	bIsRunning = true;
+	GetCharacterMovement()->MaxWalkSpeed = FMath::Max(WalkingSpeed, RunningSpeed);
+
+	// We can't run and crouch at the same time!
+	if (bIsCrouched) {
+		ToggleCrouch();
+	}
+}
+
+void ABaseCharacter::StopRunning()
+{
+	bIsRunning = false;
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
 }
 
 /* Take damage and handle death */
@@ -182,6 +208,16 @@ void ABaseCharacter::OnRetriggerMeleeStrike()
 	if (Overlaps.Num() == 0 || (Overlaps.Num() == 1 && Overlaps[0] == Cast<AActor>(this)))
 	{
 		TimerHandle_MeleeAttack.Invalidate();
+	}
+}
+
+void ABaseCharacter::ToggleCrouch()
+{
+	if (bIsCrouched) {
+		UnCrouch();
+	}
+	else if(!bIsRunning) { // can't crouch and run at the same time
+		Crouch();
 	}
 }
 

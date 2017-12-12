@@ -29,10 +29,6 @@ APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 
-	// set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
-
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
@@ -83,20 +79,18 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	check(PlayerInputComponent);
 
 	// Bind jump events
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJumping);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
-	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::StartRunning);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerCharacter::StopRunning);
+
+	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
 	// bind special actions
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
@@ -126,18 +120,6 @@ void APlayerCharacter::MoveRight(float Value)
 	if (Value != 0.0f) {
 		AddMovementInput(GetActorRightVector(), Value);
 	}
-}
-
-void APlayerCharacter::TurnAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
-}
-
-void APlayerCharacter::LookUpAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void APlayerCharacter::ScrollInventory(float Value)
@@ -183,16 +165,6 @@ void APlayerCharacter::ScrollInventory(float Value)
 			}
 		}
 
-	}
-}
-
-void APlayerCharacter::ToggleCrouch()
-{
-	if (bIsCrouched) {
-		UnCrouch();
-	}
-	else {
-		Crouch();
 	}
 }
 

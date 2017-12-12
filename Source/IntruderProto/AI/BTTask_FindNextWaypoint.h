@@ -25,5 +25,5 @@ private:
 	AGuardCharacter* CharacterRef;
 
 	UPROPERTY()
-	FVector CurentWaypoint;
+	class ATargetPoint* CurentWaypoint;
 };

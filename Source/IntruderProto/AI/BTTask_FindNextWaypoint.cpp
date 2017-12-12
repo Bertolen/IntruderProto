@@ -9,11 +9,12 @@
 #include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
 
 #include "Classes/AIController.h"
+#include "Engine/TargetPoint.h"
 
 UBTTask_FindNextWaypoint::UBTTask_FindNextWaypoint(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	NodeName = "Find Next Waypoint";
-	CurentWaypoint = FVector::ZeroVector;
+	CurentWaypoint = NULL;
 }
 
 EBTNodeResult::Type UBTTask_FindNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -35,7 +36,7 @@ EBTNodeResult::Type UBTTask_FindNextWaypoint::ExecuteTask(UBehaviorTreeComponent
 	int index = 0;
 
 	// if the current waypoint is the zero vector then we'll use the first index
-	if (CurentWaypoint != FVector::ZeroVector) {
+	if (CurentWaypoint) {
 		
 		if (!CharacterRef->GetWaypoints().Find(CurentWaypoint, index)){
 			return EBTNodeResult::Failed;
@@ -49,7 +50,7 @@ EBTNodeResult::Type UBTTask_FindNextWaypoint::ExecuteTask(UBehaviorTreeComponent
 	}
 	
 	CurentWaypoint = CharacterRef->GetWaypoints()[index];
-	OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, CurentWaypoint);
+	OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, CurentWaypoint->GetActorLocation());
 	
 	return EBTNodeResult::Succeeded;
 }

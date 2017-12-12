@@ -26,7 +26,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	FORCEINLINE TArray<FVector> GetWaypoints() const { return Waypoints; }
+	FORCEINLINE TArray<class ATargetPoint*> GetWaypoints() const { return Waypoints; }
 
 protected:
 	// Called when the character see someone
@@ -59,5 +59,5 @@ private:
 
 	/** List of waypoints the character will go through during his patrol **/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
-	TArray<FVector> Waypoints;
+	TArray<class ATargetPoint*> Waypoints;
 };
