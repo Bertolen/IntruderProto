@@ -16,6 +16,7 @@
 #include "Usables/Ladder.h"
 #include "Usables/Throwable.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Engine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -165,6 +166,13 @@ void APlayerCharacter::ScrollInventory(float Value)
 			}
 		}
 
+	}
+
+	if (Value) {
+		if(EquipedItem != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Equiped item : %s"), *EquipedItem.GetDefaultObject()->GetFName().ToString()));
+		else
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Equiped item : NONE"));
 	}
 }
 
