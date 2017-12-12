@@ -18,8 +18,11 @@ public:
 	AThrowingKnife(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// This function will be called when the user releases the object
-	virtual void OnReleased(AController* User) override;
+	virtual void OnEquipedUse(AController* User) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float ImpulseForce;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	FRotator SpawnRotationOffset;
 };

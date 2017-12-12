@@ -4,20 +4,24 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Components/StaticMeshComponent.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/Character.h"
+#include "Characters/PlayerCharacter.h"
 
 AThrowingKnife::AThrowingKnife(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	UsableLabel = "throwing knife";
 
 	ImpulseForce = 10000.0f;
+
+	SpawnRotationOffset = FRotator(0.0f, 0.0f, 90.0f);
 }
 
-void AThrowingKnife::OnReleased(AController* User)
+void AThrowingKnife::OnEquipedUse(AController* User)
 {
 	UE_LOG(LogClass, Log, TEXT("A throwing knife has been released."));
-
-	//SetActorRotation(GetActorRotation() + FRotator(0.0f, 0.0f, 90.0f));
-	SetActorRotation(User->GetControlRotation() + FRotator(0.0f, 0.0f, 90.0f));
+	
+	SetActorRotation(GetActorRotation() + SpawnRotationOffset);
 
 	PickupMesh->AddImpulse(User->GetControlRotation().Vector() * ImpulseForce);
 }

@@ -55,7 +55,7 @@ APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	GetMovementComponent()->NavAgentProps.bCanCrouch = true;
 
 	// Default offset from the character location for projectiles to spawn
-	ItemSpawnOffset = FVector(100.0f, 0.0f, 10.0f);
+	ItemSpawnOffset = FVector(100.0f, 0.0f, -10.0f);
 
 	//Init our values
 	UsingReach = 200.0f;
@@ -96,7 +96,7 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	// bind special actions
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &APlayerCharacter::Use);
-	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &APlayerCharacter::Throw);
+	PlayerInputComponent->BindAction("EquipedUse", IE_Pressed, this, &APlayerCharacter::EquipedUse);
 
 	PlayerInputComponent->BindAxis("InventoryScroll", this, &APlayerCharacter::ScrollInventory);
 }
@@ -201,22 +201,20 @@ void APlayerCharacter::Use()
 	}
 }
 
-void APlayerCharacter::Throw()
+void APlayerCharacter::EquipedUse()
 {
-	UE_LOG(LogClass, Log, TEXT("Throw"));
 	AThrowable *Throwable = Cast<AThrowable>(OnUseUsable);
 	if (Throwable) { // priority is given to the throwable item on use
 		Throwable->OnThrow(GetController());
 		OnUseUsable = NULL;
 	}
 	else if (EquipedItem != nullptr) { // If there is no throwable to throw then we use the equiped item
-		UE_LOG(LogClass, Log, TEXT("using an equiped item"));
 		UWorld* const World = GetWorld();
 		if (World == NULL)
 			return;
 
-		const FRotator SpawnRotation = GetControlRotation();
-		const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(ItemSpawnOffset);
+		const FRotator SpawnRotation = GetFirstPersonCameraComponent()->GetComponentRotation();
+		const FVector SpawnLocation = GetFirstPersonCameraComponent()->GetComponentLocation() + SpawnRotation.RotateVector(ItemSpawnOffset);
 
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
@@ -227,8 +225,7 @@ void APlayerCharacter::Throw()
 		if (!SpawnedPickup)
 			return;
 
-		UE_LOG(LogClass, Log, TEXT("Item has been spawned : %s"), *SpawnedPickup->GetFName().ToString());
-		SpawnedPickup->OnReleased(GetController());
+		SpawnedPickup->OnEquipedUse(GetController());
 
 		// Record on the Inventory that we just released one of these
 		if (!Inventory->RemoveItem(EquipedItem)) {
@@ -236,7 +233,6 @@ void APlayerCharacter::Throw()
 		}
 
 	}
-	UE_LOG(LogClass, Log, TEXT("Throw end"));
 }
 
 void APlayerCharacter::Jump()

@@ -94,9 +94,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Hability")
 	virtual void Use();
 
-	// This method uses the usable item on focus
+	// This method uses the currently equiped item (can be a throwable on hand or an inventory item)
 	UFUNCTION(BlueprintCallable, Category = "Hability")
-	virtual void Throw();
+	virtual void EquipedUse();
 
 	// Scrolling the inventory
 	UFUNCTION(BlueprintCallable, Category = "Hability")

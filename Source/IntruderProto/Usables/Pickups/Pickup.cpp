@@ -53,3 +53,8 @@ bool APickup::OnUsed(AController* NewUser)
 
 	return false;
 }
+
+void APickup::OnEquipedUse(AController * User)
+{
+	UE_LOG(LogClass, Log, TEXT("Item %s is equiped and used."), *GetFName().ToString());
+}

@@ -23,6 +23,9 @@ public:
 	// This function will be called when the user uses the object, it returns true if the user equips the object
 	virtual bool OnUsed(AController* NewUser) override;
 
+	/* This function is call when the item is equiped and used*/
+	virtual void OnEquipedUse(AController* User);
+
 protected:
 	/** Static mesh to represent the pickup in the level*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
